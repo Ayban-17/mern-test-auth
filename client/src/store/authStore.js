@@ -1,7 +1,7 @@
 import axios from "axios";
 import {create} from "zustand";
 
-const API_URL = import.meta.env.MODE === "development" ? "http://localhost:3000/api/auth":"/apit/auth";
+const API_URL = import.meta.env.MODE === "development" ? "http://localhost:3000/api/auth" : "/api/auth";
 
 axios.defaults.withCredentials = true;
 
@@ -38,6 +38,7 @@ export const useAuthStore = create((set)=>({
 
     login: async (email, password) => {
         set({isLoading:true, error:null});
+        console.log(import.meta.env.MODE)
         try {
             const response = await axios.post(`${API_URL}/login`, {email, password});
             set({user: response.data.user, isAuthenticated: true, isLoading:false});
@@ -46,6 +47,7 @@ export const useAuthStore = create((set)=>({
             set({error: error.message || "error logging in", isLoading:false});
             throw error;
         }
+       
     },
 
     logout: async () => {
